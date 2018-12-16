@@ -4,11 +4,11 @@
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
             app:startDestination="@id/deviceListFragment">
 
-    <fragment android:id="@+id/deviceListFragment" android:name="com.example.iurymiguel.bluetoothapp.DeviceListFragment"
+    <fragment android:id="@+id/deviceListFragment" android:name="com.example.iurymiguel.bluetoothapp.views.DeviceListFragment"
               android:label="fragment_device_list" tools:layout="@layout/fragment_device_list">
         <action android:id="@+id/action_deviceListFragment_to_deviceInfoFragment"
                 app:destination="@id/deviceInfoFragment"/>
     </fragment>
-    <fragment android:id="@+id/deviceInfoFragment" android:name="com.example.iurymiguel.bluetoothapp.DeviceInfoFragment"
+    <fragment android:id="@+id/deviceInfoFragment" android:name="com.example.iurymiguel.bluetoothapp.views.DeviceInfoFragment"
               android:label="fragment_device_info" tools:layout="@layout/fragment_device_info"/>
 </navigation>

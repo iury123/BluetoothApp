@@ -1,12 +1,12 @@
-package com.example.iurymiguel.bluetoothapp
+package com.example.iurymiguel.bluetoothapp.views
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.iurymiguel.bluetoothapp.R
 
 class DeviceListFragment : Fragment() {
 
@@ -21,8 +21,6 @@ class DeviceListFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_device_list, container, false)
     }
-
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

@@ -1,7 +1,8 @@
-package com.example.iurymiguel.bluetoothapp
+package com.example.iurymiguel.bluetoothapp.views
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.iurymiguel.bluetoothapp.R
 
 class MainActivity : AppCompatActivity() {
 
