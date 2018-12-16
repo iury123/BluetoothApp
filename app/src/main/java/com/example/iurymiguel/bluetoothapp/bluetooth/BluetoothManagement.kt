@@ -15,8 +15,9 @@ import android.util.Log
 import android.content.Intent
 import android.bluetooth.BluetoothGattService
 
-class BluetoothManagement(val context: Context) {
+class BluetoothManagement(private val context: Context) {
 
+    var mScanning: Boolean = false
     private var mBluetoothDeviceAddress: String? = null
     private var mBluetoothGatt: BluetoothGatt? = null
     private var mConnectionState = STATE_DISCONNECTED
@@ -91,12 +92,14 @@ class BluetoothManagement(val context: Context) {
      * Starts or Stops scanning devices.
      * @param enable the status of scanner. true - scan, false - stop.
      */
-    private fun scanDevice(enable: Boolean) {
+    fun scanDevice(enable: Boolean) {
         when (enable) {
             true -> {
+                mScanning = true
                 mBluetoothAdapter?.bluetoothLeScanner?.startScan(mScanCallback)
             }
             else -> {
+                mScanning = false
                 mBluetoothAdapter?.bluetoothLeScanner?.stopScan(mScanCallback)
             }
         }

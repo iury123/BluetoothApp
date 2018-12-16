@@ -1,6 +1,7 @@
 package com.example.iurymiguel.bluetoothapp.views
 
 import android.Manifest
+import android.arch.lifecycle.ViewModelProviders
 import android.bluetooth.BluetoothAdapter
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
@@ -11,18 +12,23 @@ import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.example.iurymiguel.bluetoothapp.R
 import com.example.iurymiguel.bluetoothapp.providers.BluetoothManagementProvider
+import com.example.iurymiguel.bluetoothapp.viewmodels.DeviceListViewModel
 import org.koin.android.ext.android.inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BluetoothScannerAction {
 
     private var mLocationPermission: Int = 0
     private val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1
     private val TIME_TO_DISMISS_TOAST: Long = 4000
+    private lateinit var mViewModel: DeviceListViewModel
     private val mBluetoothProvider: BluetoothManagementProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mViewModel = ViewModelProviders.of(this).get(DeviceListViewModel::class.java)
+
         askForLocationPermission()
     }
 
@@ -97,10 +103,30 @@ class MainActivity : AppCompatActivity() {
      */
     private fun enableBluetooth() {
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        if(!bluetoothAdapter.isEnabled) {
+        if (!bluetoothAdapter.isEnabled) {
             bluetoothAdapter.enable()
         }
     }
 
-
+    override fun onActionEmmited(startScanner: Boolean) {
+        val toastMessage = when (startScanner) {
+            true -> {
+                if (!mBluetoothProvider.getInstance().mScanning) {
+                    mBluetoothProvider.getInstance().scanDevice(true)
+                    "Scanner ativado."
+                } else {
+                    "Scanner já ativado."
+                }
+            }
+            else -> {
+                if (mBluetoothProvider.getInstance().mScanning) {
+                    mBluetoothProvider.getInstance().scanDevice(false)
+                    "Scanner desativado."
+                } else {
+                    "Scanner já desativado."
+                }
+            }
+        }
+        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
+    }
 }

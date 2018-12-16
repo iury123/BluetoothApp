@@ -1,14 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".views.DeviceListFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".views.DeviceListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+        <import type="android.view.View"/>
+        <import type="java.util.List"/>
+        <import type="com.example.iurymiguel.bluetoothapp.model.Device"/>
+        <import type="com.example.iurymiguel.bluetoothapp.views.DeviceListFragment"/>
+        <variable name="fragment" type="DeviceListFragment"/>
+        <variable name="devicesList" type="List&lt;Device&gt;"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
+            android:layout_height="match_parent">
 
-</FrameLayout>
+        <Button
+                android:text="@string/start_scan"
+                android:layout_width="0dp"
+                android:onClick="@{() -> fragment.startScan()}"
+                android:layout_height="wrap_content" android:id="@+id/buttonStartScan"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline" android:layout_marginEnd="4dp"/>
+        <Button
+                android:text="@string/stop_scan"
+                android:onClick="@{() -> fragment.stopScan()}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+                android:id="@+id/buttonStopScan" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline" android:layout_marginStart="4dp"/>
+        <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                              android:id="@+id/guideline"
+                                              android:orientation="vertical"
+                                              app:layout_constraintGuide_percent="0.5"/>
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="304dp"
+                android:layout_height="0dp" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/buttonStartScan"
+                android:visibility="@{devicesList.size() > 0 ? View.VISIBLE : View.GONE}"
+                android:id="@+id/recyclerView"/>
+        <TextView
+                android:text="@string/no_device_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:id="@+id/textView" android:layout_marginTop="8dp"
+                android:visibility="@{ devicesList.size() == 0 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/buttonStopScan"/>
+    </android.support.constraint.ConstraintLayout>
+</layout>
