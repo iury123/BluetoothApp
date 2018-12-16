@@ -3,6 +3,7 @@ package com.example.iurymiguel.bluetoothapp.views
 import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
 import android.bluetooth.BluetoothAdapter
+import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
