@@ -1,6 +1,7 @@
 package com.example.iurymiguel.bluetoothapp.views
 
 import android.Manifest
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.bluetooth.BluetoothAdapter
 import android.content.pm.PackageManager
@@ -33,12 +34,21 @@ class MainActivity : AppCompatActivity(), BluetoothScannerAction {
 
         mBluetoothManager.subscribeForScanResults {
             val device = Device(it?.device?.name, it?.device?.address, it?.rssi)
-            mViewModel.getDevices().add(device)
+            mViewModel.getDevicesLiveData() += device
         }
 
         askForLocationPermission()
     }
 
+    operator fun MutableLiveData<MutableList<Device>>.plusAssign(element: Device) {
+        val value = this.value ?: mutableListOf()
+        val macAddresses = value.map { it.macAddress }
+        val macAddressFound = macAddresses.find { it == element.macAddress }
+        macAddressFound?.let {
+            value[macAddresses.indexOf(macAddressFound)] = element
+        } ?: value.add(element)
+        this.value = value
+    }
 
     override fun onResume() {
         super.onResume()

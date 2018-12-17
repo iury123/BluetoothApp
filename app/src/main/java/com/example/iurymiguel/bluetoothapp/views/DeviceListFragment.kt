@@ -6,6 +6,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,11 @@ class DeviceListFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
 
         mViewModel.getDevicesLiveData().observe(this, Observer {
-            print("Caiu")
+            if (it != null) {
+                for (i in it) {
+                    Log.i("AAA", i.macAddress)
+                }
+            }
         })
     }
 

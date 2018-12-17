@@ -14,7 +14,4 @@ class DeviceListViewModel: ViewModel() {
         }
         return mDevices
     }
-
-    fun getDevices() = getDevicesLiveData().value!!
-
 }

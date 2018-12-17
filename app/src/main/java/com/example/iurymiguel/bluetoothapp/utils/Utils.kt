@@ -1,5 +1,6 @@
 package com.example.iurymiguel.bluetoothapp.utils
 
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.widget.Toast
 
