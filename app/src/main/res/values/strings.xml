@@ -9,4 +9,7 @@
     <string name="no_device_found">Nenhum dispositivo encontrado.</string>
     <string name="start_scan">Iniciar Scan</string>
     <string name="stop_scan">Parar Scan</string>
+    <string name="rssi">RSSI:</string>
+    <string name="mac_address">Endereço MAC:</string>
+    <string name="name">Nome:</string>
 </resources>
