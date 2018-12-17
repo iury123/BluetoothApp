@@ -6,6 +6,8 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +15,15 @@ import android.view.ViewGroup
 import com.example.iurymiguel.bluetoothapp.R
 import com.example.iurymiguel.bluetoothapp.databinding.FragmentDeviceListBinding
 import com.example.iurymiguel.bluetoothapp.viewmodels.DeviceListViewModel
+import com.example.iurymiguel.bluetoothapp.views.adapters.DeviceListRecyclerAdapter
+import kotlinx.android.synthetic.main.fragment_device_list.*
 import java.lang.Exception
 
 class DeviceListFragment : Fragment() {
 
     private var mListener: BluetoothScannerAction? = null
     private lateinit var mViewModel: DeviceListViewModel
+    private lateinit var mAdapter: DeviceListRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +33,7 @@ class DeviceListFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
 
         mViewModel.getDevicesLiveData().observe(this, Observer {
-            if (it != null) {
-                for (i in it) {
-                    Log.i("AAA", i.macAddress)
-                }
-            }
+            mAdapter.notifyDataSetChanged()
         })
     }
 
@@ -45,6 +46,15 @@ class DeviceListFragment : Fragment() {
 
         binding.devicesList = mViewModel.getDevicesLiveData().value
         binding.fragment = this
+
+        mAdapter = DeviceListRecyclerAdapter(mViewModel.getDevicesLiveData().value)
+
+        val recyclerView: RecyclerView = binding.recyclerView
+
+        recyclerView.apply {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
 
         return binding.root
     }
