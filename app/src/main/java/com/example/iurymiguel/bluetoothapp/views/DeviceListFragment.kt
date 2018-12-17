@@ -26,8 +26,8 @@ class DeviceListFragment : Fragment() {
             ViewModelProviders.of(this).get(DeviceListViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        mViewModel.getDevices().observe(this, Observer {
-
+        mViewModel.getDevicesLiveData().observe(this, Observer {
+            print("Caiu")
         })
     }
 
@@ -38,7 +38,7 @@ class DeviceListFragment : Fragment() {
         val binding: FragmentDeviceListBinding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_device_list, container, false)
 
-        binding.devicesList = mViewModel.getDevices().value
+        binding.devicesList = mViewModel.getDevicesLiveData().value
         binding.fragment = this
 
         return binding.root

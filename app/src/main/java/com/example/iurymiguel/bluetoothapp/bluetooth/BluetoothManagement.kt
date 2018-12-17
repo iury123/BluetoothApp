@@ -21,6 +21,7 @@ class BluetoothManagement(private val context: Context) {
     private var mBluetoothDeviceAddress: String? = null
     private var mBluetoothGatt: BluetoothGatt? = null
     private var mConnectionState = STATE_DISCONNECTED
+    private var mScanResultCallback: ((ScanResult?) -> Unit)? = null
 
     /**
      * Creates bluetooth adapter lazy.
@@ -36,7 +37,9 @@ class BluetoothManagement(private val context: Context) {
     private val mScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
-            println(callbackType)
+            mScanResultCallback?.let {
+                mScanResultCallback!!.invoke(result)
+            }
         }
     }
 
@@ -104,6 +107,21 @@ class BluetoothManagement(private val context: Context) {
                 mBluetoothAdapter?.bluetoothLeScanner?.stopScan(mScanCallback)
             }
         }
+    }
+
+
+    /**
+     * Watch for result retreived in scanning process.
+     */
+    fun subscribeForScanResults(callback: (ScanResult?) -> Unit) {
+        mScanResultCallback = callback
+    }
+
+    /**
+     * Destroys the callback in order not to send back any result from scanning.
+     */
+    fun unsubscribeForScanResults() {
+        mScanResultCallback = null
     }
 
     /**

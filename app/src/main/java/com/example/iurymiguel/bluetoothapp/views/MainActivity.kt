@@ -3,7 +3,6 @@ package com.example.iurymiguel.bluetoothapp.views
 import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
 import android.bluetooth.BluetoothAdapter
-import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +11,9 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.example.iurymiguel.bluetoothapp.R
-import com.example.iurymiguel.bluetoothapp.providers.BluetoothManagementProvider
+import com.example.iurymiguel.bluetoothapp.bluetooth.BluetoothManagement
+import com.example.iurymiguel.bluetoothapp.model.Device
+import com.example.iurymiguel.bluetoothapp.utils.Utils
 import com.example.iurymiguel.bluetoothapp.viewmodels.DeviceListViewModel
 import org.koin.android.ext.android.inject
 
@@ -22,13 +23,18 @@ class MainActivity : AppCompatActivity(), BluetoothScannerAction {
     private val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1
     private val TIME_TO_DISMISS_TOAST: Long = 4000
     private lateinit var mViewModel: DeviceListViewModel
-    private val mBluetoothProvider: BluetoothManagementProvider by inject()
+    private val mBluetoothManager: BluetoothManagement by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mViewModel = ViewModelProviders.of(this).get(DeviceListViewModel::class.java)
+
+        mBluetoothManager.subscribeForScanResults {
+            val device = Device(it?.device?.name, it?.device?.address, it?.rssi)
+            mViewModel.getDevices().add(device)
+        }
 
         askForLocationPermission()
     }
@@ -42,6 +48,10 @@ class MainActivity : AppCompatActivity(), BluetoothScannerAction {
         enableBluetooth()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mBluetoothManager.unsubscribeForScanResults()
+    }
 
     private fun askForLocationPermission() {
         mLocationPermission = ContextCompat.checkSelfPermission(
@@ -86,7 +96,7 @@ class MainActivity : AppCompatActivity(), BluetoothScannerAction {
 
 
     private fun showWarning() {
-        Toast.makeText(this, getString(R.string.enable_location_warning), Toast.LENGTH_LONG).show()
+        Utils.showToast(this, getString(R.string.enable_location_warning), Toast.LENGTH_LONG)
         Handler().postDelayed(object : Runnable {
             override fun run() {
                 requestPermission()
@@ -97,7 +107,6 @@ class MainActivity : AppCompatActivity(), BluetoothScannerAction {
     private fun askForEnablingLocation() {
 
     }
-
 
     /**
      * Enables bluetooth if disabled.
@@ -112,22 +121,22 @@ class MainActivity : AppCompatActivity(), BluetoothScannerAction {
     override fun onActionEmmited(startScanner: Boolean) {
         val toastMessage = when (startScanner) {
             true -> {
-                if (!mBluetoothProvider.getInstance().mScanning) {
-                    mBluetoothProvider.getInstance().scanDevice(true)
+                if (!mBluetoothManager.mScanning) {
+                    mBluetoothManager.scanDevice(true)
                     "Scanner ativado."
                 } else {
                     "Scanner já ativado."
                 }
             }
             else -> {
-                if (mBluetoothProvider.getInstance().mScanning) {
-                    mBluetoothProvider.getInstance().scanDevice(false)
+                if (mBluetoothManager.mScanning) {
+                    mBluetoothManager.scanDevice(false)
                     "Scanner desativado."
                 } else {
                     "Scanner já desativado."
                 }
             }
         }
-        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
+        Utils.showToast(this, toastMessage, Toast.LENGTH_SHORT)
     }
 }

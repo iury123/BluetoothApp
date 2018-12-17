@@ -8,11 +8,13 @@ class DeviceListViewModel: ViewModel() {
 
     private lateinit var mDevices: MutableLiveData<MutableList<Device>>
 
-    fun getDevices() : MutableLiveData<MutableList<Device>> {
+    fun getDevicesLiveData() : MutableLiveData<MutableList<Device>> {
         if(!::mDevices.isInitialized) {
             mDevices = MutableLiveData()
         }
         return mDevices
     }
+
+    fun getDevices() = getDevicesLiveData().value!!
 
 }
