@@ -1,13 +1,17 @@
 package com.example.iurymiguel.bluetoothapp.views.adapters
 
+import android.arch.lifecycle.MutableLiveData
+import android.databinding.BindingAdapter
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.iurymiguel.bluetoothapp.databinding.DeviceViewHolderBinding
 import com.example.iurymiguel.bluetoothapp.model.Device
 
-class DeviceListRecyclerAdapter(private val mDevicesList: MutableList<Device>?) :
-    RecyclerView.Adapter<DeviceListRecyclerAdapter.DeviceViewHolder>() {
+class DeviceListRecyclerAdapter : RecyclerView.Adapter<DeviceListRecyclerAdapter.DeviceViewHolder>() {
+
+    private var mDevicesList: MutableList<Device> = mutableListOf()
 
     class DeviceViewHolder(val binding: DeviceViewHolderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(device: Device) {
@@ -23,10 +27,16 @@ class DeviceListRecyclerAdapter(private val mDevicesList: MutableList<Device>?) 
         return DeviceViewHolder(binding)
     }
 
-    override fun getItemCount() = mDevicesList?.let { mDevicesList.count() } ?: 0
+    override fun getItemCount() = mDevicesList.count()
 
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
         val device = mDevicesList!![position]
         holder.bind(device)
     }
+
+    fun setDataSet(list: MutableList<Device>?) {
+        mDevicesList = list ?: mutableListOf()
+        notifyDataSetChanged()
+    }
 }
+

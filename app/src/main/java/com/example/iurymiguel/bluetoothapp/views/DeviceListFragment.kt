@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,14 +15,15 @@ import com.example.iurymiguel.bluetoothapp.R
 import com.example.iurymiguel.bluetoothapp.databinding.FragmentDeviceListBinding
 import com.example.iurymiguel.bluetoothapp.viewmodels.DeviceListViewModel
 import com.example.iurymiguel.bluetoothapp.views.adapters.DeviceListRecyclerAdapter
-import kotlinx.android.synthetic.main.fragment_device_list.*
+import org.koin.android.ext.android.inject
 import java.lang.Exception
 
 class DeviceListFragment : Fragment() {
 
     private var mListener: BluetoothScannerAction? = null
     private lateinit var mViewModel: DeviceListViewModel
-    private lateinit var mAdapter: DeviceListRecyclerAdapter
+    private lateinit var mBinding: FragmentDeviceListBinding
+    private val mAdapter: DeviceListRecyclerAdapter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +33,8 @@ class DeviceListFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
 
         mViewModel.getDevicesLiveData().observe(this, Observer {
-            mAdapter.notifyDataSetChanged()
+            mBinding.devicesList = it
+            mAdapter.setDataSet(it)
         })
     }
 
@@ -41,22 +42,22 @@ class DeviceListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentDeviceListBinding = DataBindingUtil
+       mBinding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_device_list, container, false)
 
-        binding.devicesList = mViewModel.getDevicesLiveData().value
-        binding.fragment = this
+        mBinding.devicesList = mViewModel.getDevicesLiveData().value
+        mBinding.fragment = this
 
-        mAdapter = DeviceListRecyclerAdapter(mViewModel.getDevicesLiveData().value)
+        mAdapter.setDataSet(mViewModel.getDevicesLiveData().value)
 
-        val recyclerView: RecyclerView = binding.recyclerView
+        val recyclerView: RecyclerView = mBinding.recyclerView
 
         recyclerView.apply {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(context)
         }
 
-        return binding.root
+        return mBinding.root
     }
 
     override fun onAttach(context: Context) {

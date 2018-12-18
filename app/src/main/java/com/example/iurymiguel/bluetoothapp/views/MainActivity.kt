@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.bluetooth.BluetoothAdapter
 import android.content.pm.PackageManager
+import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,7 @@ import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.example.iurymiguel.bluetoothapp.R
 import com.example.iurymiguel.bluetoothapp.bluetooth.BluetoothManagement
+import com.example.iurymiguel.bluetoothapp.databinding.ActivityMainBinding
 import com.example.iurymiguel.bluetoothapp.model.Device
 import com.example.iurymiguel.bluetoothapp.utils.Utils
 import com.example.iurymiguel.bluetoothapp.viewmodels.DeviceListViewModel
@@ -28,7 +30,8 @@ class MainActivity : AppCompatActivity(), BluetoothScannerAction {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
 
         mViewModel = ViewModelProviders.of(this).get(DeviceListViewModel::class.java)
 

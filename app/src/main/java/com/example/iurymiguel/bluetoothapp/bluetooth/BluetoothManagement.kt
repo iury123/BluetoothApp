@@ -38,7 +38,7 @@ class BluetoothManagement(private val context: Context) {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             mScanResultCallback?.let {
-                mScanResultCallback!!.invoke(result)
+                it(result)
             }
         }
     }
