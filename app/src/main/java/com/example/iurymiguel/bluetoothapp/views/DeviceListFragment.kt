@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import com.example.iurymiguel.bluetoothapp.R
 import com.example.iurymiguel.bluetoothapp.databinding.FragmentDeviceListBinding
 import com.example.iurymiguel.bluetoothapp.viewmodels.DeviceListViewModel
@@ -42,13 +43,18 @@ class DeviceListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       mBinding = DataBindingUtil
+        mBinding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_device_list, container, false)
 
         mBinding.devicesList = mViewModel.getDevicesLiveData().value
         mBinding.fragment = this
 
         mAdapter.setDataSet(mViewModel.getDevicesLiveData().value)
+
+        mAdapter.setOnClickListener {
+            mViewModel.setSelectedDevice(it)
+            view!!.findNavController().navigate(R.id.action_deviceListFragment_to_deviceInfoFragment)
+        }
 
         val recyclerView: RecyclerView = mBinding.recyclerView
 

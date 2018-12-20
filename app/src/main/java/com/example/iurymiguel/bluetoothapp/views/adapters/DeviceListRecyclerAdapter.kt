@@ -12,6 +12,7 @@ import com.example.iurymiguel.bluetoothapp.model.Device
 class DeviceListRecyclerAdapter : RecyclerView.Adapter<DeviceListRecyclerAdapter.DeviceViewHolder>() {
 
     private var mDevicesList: MutableList<Device> = mutableListOf()
+    private var mOnClickListenerCallback: ((Device) -> Unit)? = null
 
     class DeviceViewHolder(val binding: DeviceViewHolderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(device: Device) {
@@ -24,19 +25,25 @@ class DeviceListRecyclerAdapter : RecyclerView.Adapter<DeviceListRecyclerAdapter
 
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = DeviceViewHolderBinding.inflate(layoutInflater, parent, false)
-        return DeviceViewHolder(binding)
+        val holder = DeviceViewHolder(binding)
+        binding.cardview.setOnClickListener { mOnClickListenerCallback?.let { it(mDevicesList[holder.adapterPosition]) }}
+        return holder
     }
 
     override fun getItemCount() = mDevicesList.count()
 
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
-        val device = mDevicesList!![position]
+        val device = mDevicesList[position]
         holder.bind(device)
     }
 
     fun setDataSet(list: MutableList<Device>?) {
         mDevicesList = list ?: mutableListOf()
         notifyDataSetChanged()
+    }
+
+    fun setOnClickListener(callback: (Device) -> Unit) {
+        mOnClickListenerCallback = callback
     }
 }
 
