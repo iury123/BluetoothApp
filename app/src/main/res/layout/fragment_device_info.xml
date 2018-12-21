@@ -1,74 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             xmlns:tools="http://schemas.android.com/tools"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             tools:context=".views.DeviceInfoFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".views.DeviceInfoFragment">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.example.iurymiguel.bluetoothapp.model.Device"/>
+        <import type="com.example.iurymiguel.bluetoothapp.views.DeviceInfoFragment"/>
+        <variable name="device" type="Device"/>
+        <variable name="fragment" type="DeviceInfoFragment"/>
+    </data>
 
     <android.support.constraint.ConstraintLayout
-            android:layout_marginStart="4dp"
-            android:padding="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="4dp" app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/constraintLayout2">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-                android:text="Nome:"
+        <android.support.constraint.ConstraintLayout
+                android:layout_marginStart="4dp"
+                android:padding="4dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/textNameLabel"/>
+                android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="4dp" app:layout_constraintTop_toTopOf="parent"
+                android:visibility="@{ device.name != null &amp;&amp; !device.name.isEmpty() ? View.VISIBLE : View.GONE}"
+                android:id="@+id/constraintLayout2">
+
+            <TextView
+                    android:text="Nome:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/textNameLabel"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textDeviceName"
+                    android:text="@{device.name}"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textNameLabel"
+                    app:layout_constraintStart_toEndOf="@+id/textNameLabel" android:layout_marginStart="8dp"/>
+        </android.support.constraint.ConstraintLayout>
+        <TextView
+                android:text="Endereço MAC:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textMacAddressLabel" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp" app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textDeviceName"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textNameLabel"
-                app:layout_constraintStart_toEndOf="@+id/textNameLabel" android:layout_marginStart="8dp"/>
+                android:text="@{device.macAddress}"
+                android:id="@+id/textMacAddress" app:layout_constraintStart_toEndOf="@+id/textMacAddressLabel"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textMacAddressLabel"/>
+        <TextView
+                android:text="RSSI:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textRssiLabel" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/textMacAddressLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{``+device.rssi}"
+                android:id="@+id/textRssi" app:layout_constraintStart_toEndOf="@+id/textRssiLabel"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textRssiLabel"/>
+        <Button
+                android:text="Conectar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonConnect" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2" android:layout_marginEnd="8dp"
+                android:layout_marginTop="30dp" app:layout_constraintTop_toBottomOf="@+id/textRssiLabel"/>
+        <Button
+                android:text="Desconectar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonDisconnect" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline2" android:layout_marginStart="8dp"
+                android:layout_marginTop="30dp" app:layout_constraintTop_toBottomOf="@+id/textRssiLabel"/>
+        <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                              android:id="@+id/guideline2"
+                                              android:orientation="vertical" app:layout_constraintGuide_percent="0.5"/>
     </android.support.constraint.ConstraintLayout>
-    <TextView
-            android:text="Endereço MAC:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textMacAddressLabel" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp" app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textMacAddress" app:layout_constraintStart_toEndOf="@+id/textMacAddressLabel"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textMacAddressLabel"/>
-    <TextView
-            android:text="RSSI:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textRssiLabel" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/textMacAddressLabel" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textRssi" app:layout_constraintStart_toEndOf="@+id/textRssiLabel"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textRssiLabel"/>
-    <Button
-            android:text="Conectar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonConnect" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2" android:layout_marginEnd="8dp"
-            android:layout_marginTop="30dp" app:layout_constraintTop_toBottomOf="@+id/textRssiLabel"/>
-    <Button
-            android:text="Desconectar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonDisconnect" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline2" android:layout_marginStart="8dp"
-            android:layout_marginTop="30dp" app:layout_constraintTop_toBottomOf="@+id/textRssiLabel"/>
-    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                          android:id="@+id/guideline2"
-                                          android:orientation="vertical" app:layout_constraintGuide_percent="0.5"/>
-</android.support.constraint.ConstraintLayout>
+</layout>

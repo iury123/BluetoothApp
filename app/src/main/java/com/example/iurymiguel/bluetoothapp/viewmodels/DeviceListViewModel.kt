@@ -7,16 +7,12 @@ import com.example.iurymiguel.bluetoothapp.model.Device
 class DeviceListViewModel: ViewModel() {
 
     private lateinit var mDevices: MutableLiveData<MutableList<Device>>
-    private lateinit var mSelectedDevice: Device
+    lateinit var mSelectedDevice: Device
 
     fun getDevicesLiveData() : MutableLiveData<MutableList<Device>> {
         if(!::mDevices.isInitialized) {
             mDevices = MutableLiveData()
         }
         return mDevices
-    }
-
-    fun setSelectedDevice(device: Device) {
-        mSelectedDevice = device
     }
 }

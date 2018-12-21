@@ -52,7 +52,7 @@ class DeviceListFragment : Fragment() {
         mAdapter.setDataSet(mViewModel.getDevicesLiveData().value)
 
         mAdapter.setOnClickListener {
-            mViewModel.setSelectedDevice(it)
+            mViewModel.mSelectedDevice = it
             view!!.findNavController().navigate(R.id.action_deviceListFragment_to_deviceInfoFragment)
         }
 
